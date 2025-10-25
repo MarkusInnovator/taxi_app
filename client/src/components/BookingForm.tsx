@@ -181,12 +181,12 @@ function BookingForm() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-900 p-8 md:p-12 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800">
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Book Your Taxi
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-base text-gray-600 dark:text-gray-400">
             All fields marked with{" "}
             <span className="text-red-500 font-semibold">*</span> are required
           </p>
@@ -194,15 +194,15 @@ function BookingForm() {
 
         {submitStatus.type && (
           <div
-            className={`mb-8 p-5 rounded-xl border-2 ${
+            className={`mb-8 p-5 rounded-xl border ${
               submitStatus.type === "success"
-                ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 text-green-900 dark:text-green-200"
-                : "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-red-900 dark:text-red-200"
+                ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700 text-green-900 dark:text-green-200"
+                : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700 text-red-900 dark:text-red-200"
             }`}
             role="alert"
           >
             <div className="flex items-center gap-3">
-              <span className="text-2xl">
+              <span aria-hidden="true" className="text-2xl">
                 {submitStatus.type === "success" ? "✓" : "⚠"}
               </span>
               <p className="font-semibold text-base">{submitStatus.message}</p>
@@ -329,7 +329,7 @@ function BookingForm() {
           <div className="pt-4">
             <Button
               className="w-full h-14 text-lg font-semibold"
-              color="warning"
+              color="default"
               isDisabled={isSubmitting}
               isLoading={isSubmitting}
               size="lg"
@@ -344,14 +344,14 @@ function BookingForm() {
           <p className="text-center text-sm text-gray-500 dark:text-gray-400">
             By submitting this form, you agree to our{" "}
             <a
-              className="text-yellow-600 hover:underline font-medium"
+              className="text-gray-900 dark:text-white hover:underline font-medium"
               href="/terms"
             >
               Terms of Service
             </a>{" "}
             and{" "}
             <a
-              className="text-yellow-600 hover:underline font-medium"
+              className="text-gray-900 dark:text-white hover:underline font-medium"
               href="/privacy"
             >
               Privacy Policy

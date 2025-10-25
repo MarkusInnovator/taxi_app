@@ -1,4 +1,4 @@
-import { title } from "@/components/primitives";
+import { title, subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 
 interface PricingItem {
@@ -50,29 +50,31 @@ const PRICING_DATA: readonly PricingItem[] = [
 export default function PricingPage() {
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-6 py-12 md:py-16">
-        <div className="w-full max-w-5xl px-4">
-          <div className="text-center mb-10">
-            <h1 className={title()}>Pricing</h1>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              Transparent pricing with no hidden fees
-            </p>
-          </div>
+      <div className="flex flex-col gap-16 py-8 md:py-12 px-4">
+        {/* Header */}
+        <section className="flex flex-col items-center justify-center gap-4 text-center max-w-4xl mx-auto">
+          <h1 className={title()}>Pricing</h1>
+          <p className={subtitle({ class: "mt-4" })}>
+            Transparent pricing with no hidden fees
+          </p>
+        </section>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        {/* Pricing Table */}
+        <section className="max-w-5xl mx-auto w-full">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-gradient-to-r from-yellow-500 to-yellow-600">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                  <tr className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
                       Service
                     </th>
-                    <th className="px-6 py-4 text-right text-sm font-semibold text-white uppercase tracking-wider">
+                    <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
                       Price
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                   {PRICING_DATA.map((item, index) => (
                     <tr
                       key={item.id}
@@ -80,15 +82,15 @@ export default function PricingPage() {
                         transition-colors duration-150
                         ${
                           index % 2 === 0
-                            ? "bg-gray-50 dark:bg-gray-900"
-                            : "bg-white dark:bg-gray-800"
+                            ? "bg-white dark:bg-gray-900"
+                            : "bg-gray-50 dark:bg-gray-900/50"
                         }
-                        hover:bg-yellow-50 dark:hover:bg-yellow-900/20
+                        hover:bg-gray-50 dark:hover:bg-gray-800/50
                       `}
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-5">
                         <div className="flex flex-col">
-                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                          <span className="font-semibold text-gray-900 dark:text-white text-base">
                             {item.service}
                           </span>
                           {item.description && (
@@ -98,8 +100,8 @@ export default function PricingPage() {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-lg font-bold text-yellow-600 dark:text-yellow-500">
+                      <td className="px-6 py-5 text-right">
+                        <span className="text-xl font-bold text-gray-900 dark:text-white">
                           {item.price}
                         </span>
                       </td>
@@ -110,16 +112,63 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 space-y-3 text-center">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               * All prices are estimates. Exact rates available upon request.
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Contact us for corporate accounts and special rates.
             </p>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Additional Info */}
+        <section className="max-w-5xl mx-auto w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Payment Methods
+              </h3>
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                <li className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span> Cash
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span> Debit Cards
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span> Credit Cards
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-green-500">✓</span> Corporate Accounts
+                </li>
+              </ul>
+            </div>
+
+            <div className="p-8 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Special Offers
+              </h3>
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-500">★</span> Corporate discounts
+                  available
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-500">★</span> Regular customer
+                  benefits
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-500">★</span> Airport packages
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-500">★</span> Volume discounts
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
     </DefaultLayout>
   );
 }
