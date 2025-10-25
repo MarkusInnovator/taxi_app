@@ -10,19 +10,19 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Buchung",
+      label: "Booking",
       href: "/booking",
     },
     {
-      label: "prices",
+      label: "Prices",
       href: "/pricing",
     },
     {
-      label: "Über Uns",
+      label: "About Us",
       href: "/about",
     },
     {
-      label: "Dokumentation",
+      label: "Documentation",
       href: "/docs",
     },
   ],
@@ -32,19 +32,19 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Buchung",
+      label: "Booking",
       href: "/booking",
     },
     {
-      label: "Preise",
+      label: "Prices",
       href: "/pricing",
     },
     {
-      label: "Über Uns",
+      label: "About Us",
       href: "/about",
     },
     {
-      label: "Dokumentation",
+      label: "Documentation",
       href: "/docs",
     },
   ],
