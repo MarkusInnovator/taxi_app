@@ -77,7 +77,7 @@ export default function IndexPage() {
             <h1 className={title({ size: "lg" })}>
               Professional Taxi Service
               <br />
-              <span className={title({ color: "yellow", size: "lg" })}>
+              <span className={title({ color: "warning", size: "lg" })}>
                 Available 24/7
               </span>
             </h1>

@@ -1,16 +1,21 @@
-import { tv } from "tailwind-variants";
+import { tv, type VariantProps } from "tailwind-variants";
 
+/**
+ * Title component variant configuration
+ * Provides consistent typography styles for headings
+ */
 export const title = tv({
-  base: "tracking-tight inline font-semibold",
+  base: "font-semibold tracking-tight inline",
   variants: {
     color: {
-      violet: "from-[#FF1CF7] to-[#b249f8]",
-      yellow: "from-[#FF705B] to-[#FFB457]",
-      blue: "from-[#5EA2EF] to-[#0072F5]",
-      cyan: "from-[#00b7fa] to-[#01cfea]",
-      green: "from-[#6FEE8D] to-[#17c964]",
-      pink: "from-[#FF72E1] to-[#F54C7A]",
-      foreground: "dark:from-[#FFFFFF] dark:to-[#4B4B4B]",
+      default: "text-foreground",
+      primary: "text-primary",
+      secondary: "text-secondary",
+      success: "text-success",
+      warning: "text-warning",
+      danger: "text-danger",
+      gradient:
+        "bg-gradient-to-b from-foreground to-foreground/60 bg-clip-text text-transparent",
     },
     size: {
       sm: "text-3xl lg:text-4xl",
@@ -18,36 +23,32 @@ export const title = tv({
       lg: "text-4xl lg:text-6xl",
     },
     fullWidth: {
-      true: "w-full block",
+      true: "block w-full",
     },
   },
   defaultVariants: {
+    color: "default",
     size: "md",
+    fullWidth: false,
   },
-  compoundVariants: [
-    {
-      color: [
-        "violet",
-        "yellow",
-        "blue",
-        "cyan",
-        "green",
-        "pink",
-        "foreground",
-      ],
-      class: "bg-clip-text text-transparent bg-gradient-to-b",
-    },
-  ],
 });
 
+/**
+ * Subtitle component variant configuration
+ * Provides consistent typography styles for subtitles
+ */
 export const subtitle = tv({
-  base: "w-full md:w-1/2 my-2 text-lg lg:text-xl text-default-600 block max-w-full",
+  base: "text-lg lg:text-xl text-default-600 dark:text-default-500 block max-w-full my-2",
   variants: {
     fullWidth: {
-      true: "!w-full",
+      true: "w-full",
+      false: "w-full md:w-1/2",
     },
   },
   defaultVariants: {
     fullWidth: true,
   },
 });
+
+export type TitleVariants = VariantProps<typeof title>;
+export type SubtitleVariants = VariantProps<typeof subtitle>;

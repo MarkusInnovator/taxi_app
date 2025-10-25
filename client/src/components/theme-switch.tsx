@@ -1,22 +1,28 @@
-import { FC, useState, useEffect } from "react";
+import type { SwitchProps } from "@heroui/switch";
+import type { FC } from "react";
+
+import { useEffect, useState } from "react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
-import { SwitchProps, useSwitch } from "@heroui/switch";
-import clsx from "clsx";
+import { useSwitch } from "@heroui/switch";
 import { useTheme } from "@heroui/use-theme";
+import clsx from "clsx";
 
-import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
+import { MoonFilledIcon, SunFilledIcon } from "@/components/icons";
 
-export interface ThemeSwitchProps {
-  className?: string;
-  classNames?: SwitchProps["classNames"];
+interface ThemeSwitchProps {
+  readonly className?: string;
+  readonly classNames?: SwitchProps["classNames"];
 }
 
+/**
+ * ThemeSwitch component
+ * Provides a toggle switch for light/dark mode themes
+ */
 export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   className,
   classNames,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
-
   const { theme, setTheme } = useTheme();
 
   const {
@@ -33,21 +39,23 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   useEffect(() => {
     setIsMounted(true);
-  }, [isMounted]);
+  }, []);
 
-  // Prevent Hydration Mismatch
-  if (!isMounted) return <div className="w-6 h-6" />;
+  // Prevent hydration mismatch
+  if (!isMounted) {
+    return <div className="h-6 w-6" />;
+  }
 
   return (
     <Component
-      aria-label={isSelected ? "Switch to dark mode" : "Switch to light mode"}
       {...getBaseProps({
         className: clsx(
-          "px-px transition-opacity hover:opacity-80 cursor-pointer",
+          "cursor-pointer px-px transition-opacity hover:opacity-80",
           className,
           classNames?.base,
         ),
       })}
+      aria-label={isSelected ? "Switch to dark mode" : "Switch to light mode"}
     >
       <VisuallyHidden>
         <input {...getInputProps()} />
@@ -57,15 +65,11 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         className={slots.wrapper({
           class: clsx(
             [
-              "w-auto h-auto",
-              "bg-transparent",
-              "rounded-lg",
-              "flex items-center justify-center",
-              "group-data-[selected=true]:bg-transparent",
+              "flex h-auto w-auto items-center justify-center",
+              "rounded-lg bg-transparent",
+              "mx-0 px-0 pt-px",
               "!text-default-500",
-              "pt-px",
-              "px-0",
-              "mx-0",
+              "group-data-[selected=true]:bg-transparent",
             ],
             classNames?.wrapper,
           ),

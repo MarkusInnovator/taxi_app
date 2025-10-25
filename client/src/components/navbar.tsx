@@ -1,3 +1,5 @@
+import type { FC } from "react";
+
 import { useState } from "react";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
@@ -6,18 +8,22 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@heroui/navbar";
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
 
-import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
+import { ThemeSwitch } from "@/components/theme-switch";
+import { siteConfig } from "@/config/site";
 
-export const Navbar = () => {
+/**
+ * Navbar component
+ * Main navigation bar with responsive menu
+ */
+export const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -28,9 +34,9 @@ export const Navbar = () => {
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand className="gap-3 max-w-fit">
+        <NavbarBrand className="max-w-fit gap-3">
           <Link
-            className="flex justify-start items-center gap-1"
+            className="flex items-center justify-start gap-1"
             color="foreground"
             href="/"
           >
@@ -38,13 +44,13 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">🚖 Taxi Mannheim</p>
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
+        <div className="ml-2 hidden gap-4 justify-start lg:flex">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:font-medium data-[active=true]:text-primary",
                 )}
                 color="foreground"
                 href={item.href}
@@ -57,25 +63,25 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="hidden basis-1/5 sm:flex sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
+        <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
             as={Link}
-            className="text-sm font-normal text-white bg-yellow-500 hover:bg-yellow-600"
+            className="bg-default-900 text-sm font-normal text-white hover:bg-default-800 dark:bg-default-100 dark:text-black dark:hover:bg-default-200"
             href="tel:+49123456789"
             variant="flat"
           >
-            📞 Jetzt anrufen
+            📞 Call Now
           </Button>
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+      <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
@@ -86,7 +92,7 @@ export const Navbar = () => {
             <NavbarMenuItem key={`${item.label}-${index}`}>
               <Link
                 className="w-full"
-                color={index === 1 ? "warning" : "foreground"}
+                color="foreground"
                 href={item.href}
                 size="lg"
               >
