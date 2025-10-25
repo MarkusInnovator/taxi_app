@@ -1,69 +1,58 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Vite + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Taxi Mannheim",
+  description:
+    "Ihr zuverlässiger Taxi-Service in Mannheim - 24/7 verfügbar, feste Preise, professionelle Fahrer.",
   navItems: [
     {
       label: "Home",
       href: "/",
     },
     {
-      label: "Docs",
-      href: "/docs",
-    },
-    {
-      label: "Pricing",
-      href: "/pricing",
-    },
-    {
-      label: "Booking",
+      label: "Buchung",
       href: "/booking",
     },
     {
-      label: "About",
+      label: "Preise",
+      href: "/pricing",
+    },
+    {
+      label: "Über Uns",
       href: "/about",
+    },
+    {
+      label: "Dokumentation",
+      href: "/docs",
     },
   ],
   navMenuItems: [
     {
-      label: "Profile",
-      href: "/profile",
+      label: "Home",
+      href: "/",
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Buchung",
+      href: "/booking",
     },
     {
-      label: "Projects",
-      href: "/projects",
+      label: "Preise",
+      href: "/pricing",
     },
     {
-      label: "Team",
-      href: "/team",
+      label: "Über Uns",
+      href: "/about",
     },
     {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      label: "Dokumentation",
+      href: "/docs",
     },
   ],
   links: {
-    github: "https://github.com/frontio-ai/heroui",
-    twitter: "https://twitter.com/hero_ui",
-    docs: "https://heroui.com",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
+    github: "https://github.com/MarkusInnovator/taxi_app",
+    twitter: "https://twitter.com/taximannheim",
+    docs: "/docs",
+    discord: "#",
+    sponsor: "#",
   },
 };
