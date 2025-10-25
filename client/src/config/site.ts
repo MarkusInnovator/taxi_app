@@ -14,7 +14,7 @@ export const siteConfig = {
       href: "/booking",
     },
     {
-      label: "Preise",
+      label: "prices",
       href: "/pricing",
     },
     {
