@@ -3,6 +3,8 @@ import type { ChangeEvent, FC, FormEvent } from "react";
 import { useCallback, useState } from "react";
 import { Button, Input, Select, SelectItem, Textarea } from "@heroui/react";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+
 interface BookingFormData {
   readonly fullName: string;
   readonly email: string;
@@ -20,14 +22,6 @@ interface SubmitStatus {
   readonly type: "success" | "error" | null;
   readonly message: string;
 }
-
-const VEHICLE_TYPES = [
-  { key: "standard", label: "Standard Sedan (1-4 passengers)" },
-  { key: "premium", label: "Premium Sedan (1-4 passengers)" },
-  { key: "van", label: "Van (5-8 passengers)" },
-  { key: "luxury", label: "Luxury Vehicle (1-4 passengers)" },
-  { key: "suv", label: "SUV (1-6 passengers)" },
-] as const;
 
 const INITIAL_FORM_DATA: BookingFormData = {
   fullName: "",
@@ -47,8 +41,6 @@ const INITIAL_SUBMIT_STATUS: SubmitStatus = {
   message: "",
 };
 
-const SUCCESS_MESSAGE = "Booking confirmed! We'll contact you shortly.";
-const ERROR_MESSAGE = "Submission failed. Please try again.";
 const API_DELAY_MS = 1500;
 const FORM_RESET_DELAY_MS = 4000;
 
@@ -109,12 +101,21 @@ const validateForm = (data: BookingFormData): { [key: string]: string } => {
 };
 
 const BookingForm: FC = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<BookingFormData>(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>(
     INITIAL_SUBMIT_STATUS,
   );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const vehicleTypes = [
+    { key: "standard", label: t.booking.vehicleTypes.standard },
+    { key: "premium", label: t.booking.vehicleTypes.premium },
+    { key: "van", label: t.booking.vehicleTypes.van },
+    { key: "luxury", label: t.booking.vehicleTypes.luxury },
+    { key: "suv", label: t.booking.vehicleTypes.suv },
+  ];
 
   const getTodayDate = (): string => {
     const today = new Date();
@@ -149,7 +150,7 @@ const BookingForm: FC = () => {
 
         setSubmitStatus({
           type: "success",
-          message: SUCCESS_MESSAGE,
+          message: t.booking.success,
         });
 
         setTimeout(() => {
@@ -158,13 +159,13 @@ const BookingForm: FC = () => {
       } catch {
         setSubmitStatus({
           type: "error",
-          message: ERROR_MESSAGE,
+          message: t.booking.error,
         });
       } finally {
         setIsSubmitting(false);
       }
     },
-    [formData, resetForm],
+    [formData, resetForm, t.booking.error, t.booking.success],
   );
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -205,11 +206,11 @@ const BookingForm: FC = () => {
           <div className="mb-2 flex items-center justify-center gap-2">
             <span className="text-3xl">🚖</span>
             <h2 className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold tracking-tight text-transparent dark:from-white dark:to-gray-300">
-              Reserve Your Ride
+              {t.booking.formTitle}
             </h2>
           </div>
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            Complete the form below to book your premium transportation
+            {t.booking.formSubtitle}
           </p>
         </div>
 
@@ -372,7 +373,7 @@ const BookingForm: FC = () => {
               variant="bordered"
               onChange={(e) => handleSelectChange(e.target.value)}
             >
-              {VEHICLE_TYPES.map((vehicle) => (
+              {vehicleTypes.map((vehicle) => (
                 <SelectItem key={vehicle.key}>{vehicle.label}</SelectItem>
               ))}
             </Select>

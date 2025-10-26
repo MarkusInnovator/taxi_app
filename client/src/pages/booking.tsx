@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 import BookingForm from "@/components/BookingForm";
 import { subtitle, title } from "@/components/primitives";
+import { useLanguage } from "@/contexts/LanguageContext";
 import DefaultLayout from "@/layouts/default";
 
 interface FeatureCardProps {
@@ -13,27 +14,6 @@ interface FeatureCardProps {
 
 const CONTACT_PHONE = "+49123456789" as const;
 const CONTACT_PHONE_DISPLAY = "+49 123 456 789" as const;
-
-const FEATURES = [
-  {
-    icon: "⚡",
-    title: "Instant Confirmation",
-    description: "Real-time booking status",
-    delay: "0s",
-  },
-  {
-    icon: "💳",
-    title: "Multiple Payment Options",
-    description: "Cash, card & digital wallets",
-    delay: "0.1s",
-  },
-  {
-    icon: "🚗",
-    title: "Premium Fleet",
-    description: "Modern vehicles & expert drivers",
-    delay: "0.2s",
-  },
-] as const;
 
 const FeatureCard: FC<FeatureCardProps> = ({
   icon,
@@ -57,6 +37,29 @@ const FeatureCard: FC<FeatureCardProps> = ({
 );
 
 const BookingPage: FC = () => {
+  const { t } = useLanguage();
+
+  const features = [
+    {
+      icon: "⚡",
+      title: t.booking.features.instant.title,
+      description: t.booking.features.instant.description,
+      delay: "0s",
+    },
+    {
+      icon: "💳",
+      title: t.booking.features.payment.title,
+      description: t.booking.features.payment.description,
+      delay: "0.1s",
+    },
+    {
+      icon: "🚗",
+      title: t.booking.features.fleet.title,
+      description: t.booking.features.fleet.description,
+      delay: "0.2s",
+    },
+  ] as const;
+
   return (
     <DefaultLayout>
       <section className="relative min-h-screen px-4 py-16 md:py-24">
@@ -74,14 +77,14 @@ const BookingPage: FC = () => {
                   "mb-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent dark:from-white dark:via-gray-200 dark:to-white",
               })}
             >
-              Reserve Your Journey
+              {t.booking.pageTitle}
             </h1>
             <p className={subtitle({ class: "mx-auto max-w-2xl" })}>
-              Experience premium transportation with seamless booking
+              {t.booking.pageSubtitle}
             </p>
             <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-6 py-3 text-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/80">
               <span className="text-gray-600 dark:text-gray-400">
-                Need immediate support?
+                {t.booking.needHelp}
               </span>
               <a
                 className="font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
@@ -94,7 +97,7 @@ const BookingPage: FC = () => {
 
           {/* Features Grid */}
           <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {FEATURES.map((feature) => (
+            {features.map((feature) => (
               <FeatureCard key={feature.title} {...feature} />
             ))}
           </div>

@@ -16,8 +16,11 @@ import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
 
 import { Logo } from "@/components/icons";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { siteConfig } from "@/config/site";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const PHONE_NUMBER = "+49123456789" as const;
 
 /**
  * Navbar component
@@ -25,6 +28,15 @@ import { siteConfig } from "@/config/site";
  */
 export const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const navItems = [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.booking, href: "/booking" },
+    { label: t.nav.pricing, href: "/pricing" },
+    { label: t.nav.about, href: "/about" },
+    { label: t.nav.docs, href: "/docs" },
+  ];
 
   return (
     <HeroUINavbar
@@ -44,8 +56,8 @@ export const Navbar: FC = () => {
             <p className="font-bold text-inherit">🚖 Taxi Mannheim</p>
           </Link>
         </NavbarBrand>
-        <div className="ml-2 hidden gap-4 justify-start lg:flex">
-          {siteConfig.navItems.map((item) => (
+        <div className="ml-2 hidden justify-start gap-4 lg:flex">
+          {navItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link
                 className={clsx(
@@ -67,28 +79,30 @@ export const Navbar: FC = () => {
         justify="end"
       >
         <NavbarItem className="hidden gap-2 sm:flex">
+          <LanguageSwitcher />
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
             as={Link}
             className="bg-default-900 text-sm font-normal text-white hover:bg-default-800 dark:bg-default-100 dark:text-black dark:hover:bg-default-200"
-            href="tel:+49123456789"
+            href={`tel:${PHONE_NUMBER}`}
             variant="flat"
           >
-            📞 Call Now
+            📞 {t.home.callNow}
           </Button>
         </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
+        <LanguageSwitcher />
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
+          {navItems.map((item, index) => (
             <NavbarMenuItem key={`${item.label}-${index}`}>
               <Link
                 className="w-full"
