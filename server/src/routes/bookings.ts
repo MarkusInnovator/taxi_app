@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { Booking } from '../models/Booking';
 import { Driver } from '../models/Driver';
@@ -11,14 +11,15 @@ import { io } from '../index';
 const router = Router();
 
 // Create booking
-router.post('/', authenticate, async (req: AuthRequest, res) => {
+router.post('/', authenticate, async (req: AuthRequest, res): Promise<void> => {
   try {
     const { error } = validateBooking(req.body);
     if (error) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
-        message: error.details[0].message,
+        message: error.details?.[0]?.message || 'Validation error',
       } as ApiResponse);
+      return;
     }
 
     const bookingData = req.body as BookingRequest;
@@ -84,7 +85,7 @@ router.post('/', authenticate, async (req: AuthRequest, res) => {
 });
 
 // Get user's bookings
-router.get('/my-bookings', authenticate, async (req: AuthRequest, res) => {
+router.get('/my-bookings', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user._id;
     const { status, page = 1, limit = 10 } = req.query;
@@ -133,7 +134,7 @@ router.get('/my-bookings', authenticate, async (req: AuthRequest, res) => {
 });
 
 // Get booking details
-router.get('/:id', authenticate, async (req: AuthRequest, res) => {
+router.get('/:id', authenticate, async (req: AuthRequest, res): Promise<void> => {
   try {
     const bookingId = req.params.id;
     const userId = req.user._id;
@@ -150,8 +151,8 @@ router.get('/:id', authenticate, async (req: AuthRequest, res) => {
     }
 
     // Check if user has access to this booking
-    const hasAccess = booking.customerId._id.toString() === userId.toString() ||
-                     booking.driverId?._id.toString() === userId.toString();
+    const hasAccess = (booking.customerId as any)._id.toString() === userId.toString() ||
+                     (booking.driverId as any)?._id.toString() === userId.toString();
 
     if (!hasAccess && req.user.role !== 'admin') {
       return res.status(403).json({
@@ -175,7 +176,7 @@ router.get('/:id', authenticate, async (req: AuthRequest, res) => {
 });
 
 // Accept booking (Driver only)
-router.put('/:id/accept', authenticate, authorize('driver'), async (req: AuthRequest, res) => {
+router.put('/:id/accept', authenticate, authorize('driver'), async (req: AuthRequest, res): Promise<void> => {
   try {
     const bookingId = req.params.id;
     const driverId = req.user._id;
@@ -183,17 +184,19 @@ router.put('/:id/accept', authenticate, authorize('driver'), async (req: AuthReq
     const booking = await Booking.findById(bookingId);
 
     if (!booking) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'Booking not found',
       } as ApiResponse);
+      return;
     }
 
     if (booking.status !== 'pending') {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'Booking is no longer available',
       } as ApiResponse);
+      return;
     }
 
     // Update booking
@@ -224,7 +227,7 @@ router.put('/:id/accept', authenticate, authorize('driver'), async (req: AuthReq
 });
 
 // Cancel booking
-router.put('/:id/cancel', authenticate, async (req: AuthRequest, res) => {
+router.put('/:id/cancel', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const bookingId = req.params.id;
     const userId = req.user._id;
