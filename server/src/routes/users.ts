@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { authenticate, authorize, AuthRequest } from '../middleware/auth';
 import { User } from '../models/User';
 import { ApiResponse } from '../types';
@@ -6,10 +6,10 @@ import { ApiResponse } from '../types';
 const router = Router();
 
 // Get user profile
-router.get('/profile', authenticate, async (req: AuthRequest, res) => {
+router.get('/profile', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const user = await User.findById(req.user._id);
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -32,13 +32,13 @@ router.get('/profile', authenticate, async (req: AuthRequest, res) => {
 });
 
 // Update user profile
-router.put('/profile', authenticate, async (req: AuthRequest, res) => {
+router.put('/profile', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { name, phone, profileImage, location } = req.body;
-    
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { 
+      {
         ...(name && { name }),
         ...(phone && { phone }),
         ...(profileImage && { profileImage }),
@@ -69,16 +69,16 @@ router.put('/profile', authenticate, async (req: AuthRequest, res) => {
 });
 
 // Get all users (Admin only)
-router.get('/', authenticate, authorize('admin'), async (req: AuthRequest, res) => {
+router.get('/', authenticate, authorize('admin'), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { page = 1, limit = 10, role, search } = req.query;
-    
+
     const query: any = {};
-    
+
     if (role) {
       query.role = role;
     }
-    
+
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
@@ -117,10 +117,10 @@ router.get('/', authenticate, authorize('admin'), async (req: AuthRequest, res) 
 });
 
 // Deactivate user (Admin only)
-router.put('/:id/deactivate', authenticate, authorize('admin'), async (req: AuthRequest, res) => {
+router.put('/:id/deactivate', authenticate, authorize('admin'), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const userId = req.params.id;
-    
+
     const user = await User.findByIdAndUpdate(
       userId,
       { isActive: false },

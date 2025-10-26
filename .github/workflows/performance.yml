@@ -2,22 +2,22 @@ name: Performance Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
+    - cron: "0 2 * * 1" # Weekly on Monday at 2 AM
 
 jobs:
   # Load Testing
   load-test:
     name: Load Testing
     runs-on: ubuntu-latest
-    
+
     services:
       mongodb:
         image: mongo:7.0
         ports:
           - 27017:27017
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,8 +25,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
           cache-dependency-path: server/package-lock.json
 
       - name: Install dependencies
@@ -95,14 +95,14 @@ jobs:
                     headers:
                       Authorization: "Bearer fake-token"
           EOF
-          
+
           artillery run load-test.yml --output report.json
 
       - name: Generate HTML report
         run: artillery report report.json
 
       - name: Upload performance report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance-report
           path: report.json.html
@@ -111,7 +111,7 @@ jobs:
   lighthouse:
     name: Lighthouse Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -121,6 +121,6 @@ jobs:
         with:
           urls: |
             http://localhost:3001/health
-          budgetPath: './server/.lighthouserc.json'
+          budgetPath: "./server/.lighthouserc.json"
           uploadArtifacts: true
           temporaryPublicStorage: true

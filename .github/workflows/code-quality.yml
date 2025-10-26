@@ -2,16 +2,16 @@ name: Code Quality
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # Code Quality Analysis
   code-quality:
     name: Code Quality Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,8 +21,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
           cache-dependency-path: server/package-lock.json
 
       - name: Install dependencies
@@ -58,7 +58,7 @@ jobs:
   dependency-check:
     name: Dependency Vulnerability Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,8 +66,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
           cache-dependency-path: server/package-lock.json
 
       - name: Install dependencies
@@ -85,12 +85,12 @@ jobs:
       - name: OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'taxi-app-backend'
-          path: './server'
-          format: 'ALL'
-          
+          project: "taxi-app-backend"
+          path: "./server"
+          format: "ALL"
+
       - name: Upload OWASP results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
           path: reports/
