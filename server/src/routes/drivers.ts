@@ -8,7 +8,7 @@ import { validateDriverProfile, validateLocationUpdate } from '../utils/validati
 const router = Router();
 
 // Get driver profile
-router.get('/profile', authenticate, authorize('driver'), async (req: AuthRequest, res) => {
+router.get('/profile', authenticate, authorize('driver'), async (req: AuthRequest, res: any) => {
   try {
     const driver = await Driver.findOne({ userId: req.user._id })
       .populate('userId', 'name email phone profileImage');
@@ -35,13 +35,13 @@ router.get('/profile', authenticate, authorize('driver'), async (req: AuthReques
 });
 
 // Update driver profile
-router.put('/profile', authenticate, authorize('driver'), async (req: AuthRequest, res) => {
+router.put('/profile', authenticate, authorize('driver'), async (req: AuthRequest, res: any) => {
   try {
     const { error } = validateDriverProfile(req.body);
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.details[0].message,
+        message: error.details?.[0]?.message || 'Validation error',
       } as ApiResponse);
     }
 
@@ -79,7 +79,7 @@ router.put('/location', authenticate, authorize('driver'), async (req: AuthReque
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.details[0].message,
+        message: error.details?.[0]?.message || 'Validation error',
       } as ApiResponse);
     }
 
