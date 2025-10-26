@@ -1,0 +1,115 @@
+name: Auto Update Dependencies
+
+on:
+  schedule:
+    - cron: '0 3 * * 1' # Weekly on Monday at 3 AM
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Update dependencies
+        working-directory: ./server
+        run: |
+          npx npm-check-updates -u
+          npm install
+
+      - name: Run tests
+        working-directory: ./server
+        run: npm test
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/taxi_app_test
+          JWT_SECRET: test-secret-key
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update dependencies'
+          title: 'chore: automated dependency updates'
+          body: |
+            This PR contains automated dependency updates.
+            
+            **Changes:**
+            - Updated npm dependencies to latest versions
+            - All tests are passing
+            
+            Please review the changes and merge if everything looks good.
+          branch: chore/update-dependencies
+          delete-branch: true
+
+  # Security Updates (Separate job for critical security updates)
+  security-updates:
+    name: Security Updates
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Fix security vulnerabilities
+        working-directory: ./server
+        run: |
+          npm audit fix --force
+          npm install
+
+      - name: Run tests
+        working-directory: ./server
+        run: npm test
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/taxi_app_test
+          JWT_SECRET: test-secret-key
+
+      - name: Create Security PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'security: fix vulnerabilities'
+          title: '🔒 security: automated security fixes'
+          body: |
+            This PR contains automated security vulnerability fixes.
+            
+            **Security Updates:**
+            - Fixed known security vulnerabilities
+            - All tests are passing
+            
+            **⚠️ PRIORITY:** Please review and merge this PR as soon as possible.
+          branch: security/fix-vulnerabilities
+          delete-branch: true
+          labels: |
+            security
+            priority-high

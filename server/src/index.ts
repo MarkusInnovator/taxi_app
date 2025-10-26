@@ -10,7 +10,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
 
 // Routes
-import authRoutes from './/routes/auth';
+import authRoutes from './routes/auth';
 import userRoutes from './routes/users';
 import driverRoutes from './routes/drivers';
 import bookingRoutes from './routes/bookings';
