@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 const rateLimiter = new RateLimiterMemory({
-  keyGenerator: (req: Request) => req.ip || 'unknown',
   points: 100, // Number of requests
   duration: 900, // Per 15 minutes (900 seconds)
 });

@@ -1,35 +1,38 @@
-import { Router } from 'express';
+import { Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User';
+import { AuthRequest, authenticate } from '../middleware/auth';
 import { Driver } from '../models/Driver';
+import { User } from '../models/User';
 import { ApiResponse, LoginRequest, RegisterRequest } from '../types';
-import { validateRegister, validateLogin } from '../utils/validation';
+import { validateLogin, validateRegister } from '../utils/validation';
 
 const router = Router();
 
 // Register
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res): Promise<void> => {
   try {
     const { error } = validateRegister(req.body);
     if (error) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
-        message: error.details[0].message,
+        message: error.details?.[0]?.message || 'Validation error',
       } as ApiResponse);
+      return;
     }
 
     const { name, email, phone, password, role } = req.body as RegisterRequest;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ 
-      $or: [{ email }, { phone }] 
+    const existingUser = await User.findOne({
+      $or: [{ email }, { phone }]
     });
 
     if (existingUser) {
-      return res.status(409).json({
+      res.status(409).json({
         success: false,
         message: 'User with this email or phone already exists',
       } as ApiResponse);
+      return;
     }
 
     // Create user
@@ -67,10 +70,12 @@ router.post('/register', async (req, res) => {
     }
 
     // Generate JWT token
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET || 'fallback-secret',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+      jwtSecret,
+      { expiresIn: jwtExpiresIn }
     );
 
     res.status(201).json({
@@ -91,14 +96,15 @@ router.post('/register', async (req, res) => {
 });
 
 // Login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res): Promise<void> => {
   try {
     const { error } = validateLogin(req.body);
     if (error) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
-        message: error.details[0].message,
+        message: error.details?.[0]?.message || 'Validation error',
       } as ApiResponse);
+      return;
     }
 
     const { email, password } = req.body as LoginRequest;
@@ -107,27 +113,31 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !user.isActive) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Invalid credentials',
       } as ApiResponse);
+      return;
     }
 
     // Check password
     const isPasswordValid = await user.comparePassword(password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Invalid credentials',
       } as ApiResponse);
+      return;
     }
 
     // Generate JWT token
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET || 'fallback-secret',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+      jwtSecret,
+      { expiresIn: jwtExpiresIn }
     );
 
     res.json({
@@ -148,25 +158,16 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', async (req, res) => {
+router.get('/me', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: 'Access denied. No token provided.',
-      } as ApiResponse);
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any;
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(req.user._id);
 
     if (!user || !user.isActive) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: 'Invalid token or user not found.',
       } as ApiResponse);
+      return;
     }
 
     res.json({
@@ -183,4 +184,4 @@ router.get('/me', async (req, res) => {
   }
 });
 
-export default router;
+export default router; export default router;

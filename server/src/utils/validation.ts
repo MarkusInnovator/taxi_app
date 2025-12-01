@@ -11,7 +11,7 @@ export const validateRegister = (data: any) => {
       'string.empty': 'Email is required',
       'string.email': 'Please provide a valid email address',
     }),
-    phone: Joi.string().pattern(/^[\+]?[1-9][\d]{0,15}$/).required().messages({
+    phone: Joi.string().pattern(/^[+]?[1-9][\d]{0,15}$/).required().messages({
       'string.empty': 'Phone number is required',
       'string.pattern.base': 'Please provide a valid phone number',
     }),

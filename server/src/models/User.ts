@@ -1,5 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { Document, Schema, model } from 'mongoose';
 
 export interface IUser extends Document {
   name: string;
@@ -37,7 +37,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, 'Phone number is required'],
       trim: true,
-      match: [/^[\+]?[1-9][\d]{0,15}$/, 'Please provide a valid phone number'],
+      match: [/^[+]?[1-9][\d]{0,15}$/, 'Please provide a valid phone number'],
     },
     password: {
       type: String,
@@ -71,7 +71,7 @@ const userSchema = new Schema<IUser>(
 // Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  
+
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
