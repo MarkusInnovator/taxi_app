@@ -1,0 +1,90 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.container h2 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.rides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.ride-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.ride-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ride-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.ride-id {
+  font-weight: bold;
+  color: #555;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-requested { background: #fff3cd; color: #856404; }
+.badge-accepted { background: #cfe2ff; color: #084298; }
+.badge-ongoing { background: #d1ecf1; color: #0c5460; }
+.badge-completed { background: #d4edda; color: #155724; }
+.badge-cancelled { background: #f8d7da; color: #721c24; }
+
+.ride-details p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.ride-date {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 1rem;
+}
+
+.btn-cancel {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .rides-grid {
+    grid-template-columns: 1fr;
+  }
+}

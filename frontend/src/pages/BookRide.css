@@ -1,0 +1,31 @@
+.book-ride-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.book-ride-box {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.book-ride-box h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.message {
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #28a745;
+}
