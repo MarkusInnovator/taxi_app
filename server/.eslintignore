@@ -1,7 +1,0 @@
-node_modules
-dist
-coverage
-*.js
-.env
-.env.local
-.env.production
