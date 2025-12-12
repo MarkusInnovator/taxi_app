@@ -12,7 +12,7 @@ import DriverDashboard from './pages/DriverDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
@@ -70,6 +70,6 @@ function App() {
       </AuthProvider>
     </Router>
   );
-}
+};
 
 export default App;
